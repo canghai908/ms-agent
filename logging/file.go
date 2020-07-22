@@ -64,7 +64,7 @@ func IsNotExistMkDir(src string) error {
 
 //MkDir a
 func MkDir(src string) error {
-	err := os.MkdirAll(src, os.ModePerm)
+	err := os.MkdirAll(src, 0755)
 	if err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func MustOpen(fileName, filePath string) (*os.File, error) {
 		return nil, fmt.Errorf("file.IsNotExistMkDir src: %s, err: %v", src, err)
 	}
 
-	f, err := Open(src+fileName, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	f, err := Open(src+fileName, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0755)
 	if err != nil {
 		return nil, fmt.Errorf("Fail to OpenFile :%v", err)
 	}
