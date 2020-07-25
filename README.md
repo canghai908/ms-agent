@@ -13,6 +13,11 @@ cd ms-agent
 ./control pack
 ```
 
+## 更新记录
+
+V1.0.1
+2020.07.24 修复 log 日志权限问题
+
 会编译生成二进制文件，并打包到压缩包
 
 ## 配置
@@ -47,7 +52,7 @@ cd /usr/local/zbxtable
 此程序必须部署在 Zabbix Server
 
 ```
-yum install https://dl.cactifans.com/zabbix/ms-agent-1.0.0-1.el7.x86_64.rpm -y
+yum install https://dl.cactifans.com/zabbix/ms-agent-1.0.1-1.el7.x86_64.rpm -y
 ```
 
 环境信息

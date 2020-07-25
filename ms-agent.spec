@@ -1,11 +1,11 @@
-Name:		ms-agent
-Version:	1.0.0
+Name:		   ms-agent
+Version:	   %{version}
 Release: 	1%{?alphatag:.%{alphatag}}%{?dist}
-Summary:	A tools send zabbix alerts to ZbxTable
+Summary: 	A tools send zabbix alerts to ZbxTable
 Group:		Applications/Internet
-License:	Apache-2.0
-URL:		https://blog.cactifans.com/
-Source0:	ms-agent-%{version}%{?alphatag:%{alphatag}}.tar.gz
+License:	   Apache-2.0
+URL:		   https://zbxtable.cactifans.com
+Source0:	   ms-agent-%{version}%{?alphatag:%{alphatag}}.tar.gz
 
 Buildroot:	%{_tmppath}/ms-agent-%{version}-%{release}-root-%(%{__id_u} -n)
 
