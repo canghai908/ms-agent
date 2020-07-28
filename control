@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # release version
-version=1.0.1
+version=1.0.2
 
 CWD=$(cd $(dirname $0)/; pwd)
 cd $CWD
 
 usage()
 {
-	echo $"Usage: $0 {start|stop|restart|status|build|pack} <module>"
+	echo $"Usage: $0 {build|pack} <module>"
 	exit 0
 }
 
