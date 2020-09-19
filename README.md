@@ -1,6 +1,6 @@
 # ms-agent
 
-ms-agent 是一个使用 go 语言编写接受 zabbix 的告警消息并发送到 [ZbxTable](https://github.com/canghai908/zbxtable) 平台的工具，需配合 ZbxTable 平台使用。
+ms-agent 是一个使用 go 语言编写接收zabbix 的告警消息并发送到 [ZbxTable](https://github.com/canghai908/zbxtable) 平台的工具，需配合 ZbxTable 平台使用。
 
 ## 编译
 
