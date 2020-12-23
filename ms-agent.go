@@ -69,6 +69,7 @@ func main() {
 	}
 	token := setting.AppSetting.Token
 	req.Header.Add("Token", token)
+	req.Header.Add("ZBX-TenantID", setting.AppSetting.TenantID)
 	req.Header.Add("User-Agent", "Zabbix-Client")
 	resp, err := client.Do(req)
 	if err != nil {
