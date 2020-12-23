@@ -9,6 +9,7 @@ var cfg *ini.File
 
 type App struct {
 	Debug       string
+	TenantID    string
 	LogSavePath string
 	Host        string
 	Token       string
