@@ -16,6 +16,11 @@ cd ms-agent
 ```
 
 ## 更新记录
+V1.0.4
+2022.07.11 
+1. 默认配置文件修改为程序目录下
+2. 配置文件host地址不需要增加/v1/receive
+
 
 V1.0.1
 2020.07.24 修复 log 日志权限问题
@@ -34,50 +39,84 @@ cd /usr/local/zbxtable
 显示如下日志
 
 ``` 
-2020/07/18 23:22:16.881 [I] [install.go:43]  Zabbix API Address: http://zabbix-server/api_jsonrpc.php
-2020/07/18 23:22:16.881 [I] [install.go:44]  Zabbix Admin User: Admin
-2020/07/18 23:22:16.881 [I] [install.go:45]  Zabbix Admin Password: xxxxx
-2020/07/18 23:22:17.716 [I] [install.go:52]  登录zabbix平台成功!
-2020/07/18 23:22:17.879 [I] [install.go:69]  创建告警媒介成功!
-2020/07/18 23:22:18.027 [I] [install.go:82]  创建告警用户组成功!
-2020/07/18 23:22:18.198 [I] [install.go:113]  创建告警用户成功!
-2020/07/18 23:22:18.198 [I] [install.go:114]  用户名:ms-agent
-2020/07/18 23:22:18.198 [I] [install.go:115]  密码:xxxx
-2020/07/18 23:22:18.366 [I] [install.go:167]  创建告警动作成功!
-2020/07/18 23:22:18.366 [I] [install.go:168]  插件安装完成!
+2022/07/04 16:27:48.252 [I] [command.go:163]  Create media type successfully!
+2022/07/04 16:27:48.320 [I] [command.go:163]  Create user group successfully!
+2022/07/04 16:27:48.575 [I] [command.go:163]  Create alarm user successfully!
+2022/07/04 16:27:48.575 [I] [command.go:163]  Username : ms-agent
+2022/07/04 16:27:48.575 [I] [command.go:163]  Password : qynNlKzMBx
+2022/07/04 16:27:48.668 [I] [command.go:163]  Create alarm action successfully!
+2022/07/04 16:27:48.668 [I] [command.go:163]  MS-Agent plugin configured successfully!
+2022/07/04 16:27:48.668 [I] [command.go:163]  MS-Agent token is de0c0d234f054c74b3d87d715f69afb6
 ```
 
 此步骤会在 Zabbix Server 创建 ms-agent，密码为随机，并配置相关 action 和 media，并关联到用户
 
 ## 安装
+下载二进制文件，并解压
 
-此程序必须部署在 Zabbix Server
-
-``` 
-yum install https://dl.cactifans.com/zabbix/ms-agent-1.0.1-1.el7.x86_64.rpm -y
+```
+cd /opt/
+wget https://dl.cactifans.com/zbxtable/ms-agent-1.0.4.tar.gz
+tar zxvf ms-agent-1.0.4.tar.gz
+mv ms-agent-1.0.4 ms-agent
 ```
 
-环境信息
+解压之后生成一个 ms-agent 二进制文件,一个 app.ini 配置文件。
 
-| 程序     | 路径                                  | 作用                                             |
-| :------- | :------------------------------------ | :----------------------------------------------- |
-| ms-agent | /usr/lib/zabbix/alertscripts/ms-agent | 接收 Zabbix 平台产生的告警并发送到 ZbxTable 平台 |
-| app.ini  | /etc/ms-agent/app.ini                 | ms-agent 配置文件                                |
+| 程序       | 作用                                             |
+| :-------  | :----------------------------------------------- |
+| ms-agent  | 接收 Zabbix 平台产生的告警并发送到 ZbxTable 平台 |
+| app.ini   | ms-agent 配置文件                                |
 
-如果你的 Zabbix Server 的 alertscripts 目录不为/usr/lib/zabbix/alertscripts/ 需要移动 ms-agen 到你的 zabbix server 的 alertscripts 目录下即可, 否则会在 Zabbix 告警页面出现找不到 ms-agent 的错误提示，也无法收到告警消息。
-也可以修改 Zabbix Server 的配置文件，将 alertscripts 目录指向/usr/lib/zabbix/alertscripts/
-
+拷贝 ms-agent 到你的 zabbix server 的 Alertscripts 目录下，默认路径为/usr/lib/zabbix/alertscripts/，也可通过修改 Zabbix Server 的配置文件指定alertscripts 目录。
+修改zabbix server的Alertscripts目录
 vi zabbix_server.conf
 
-``` 
+```
 AlertScriptsPath=/usr/lib/zabbix/alertscripts
 ```
 
-修改后重启 Zabbix Server 生效
+重启 Zabbix Server 生效.
+拷贝ms-agent二进制及app.ini配置文件到zabbix server配置的告警脚本目录
 
-## Debug
+```
+cp ms-agent/* /usr/lib/zabbix/alertscripts/
+```
 
-可修改配置文件打开 Debug 模式，查看日志/tmp/ms-agent_yyyymmdd.log
+赋予ms-agent脚本可执行权限
+
+```
+chmod a+x /usr/lib/zabbix/alertscripts/ms-agent
+```
+
+至此完成基本安装
+
+### 配置文件
+zabbix server会调用ms-agent进行告警的发送，同时会读取ms-agent程序目录下的app.ini配置文件,默认内容如下
+
+```
+[app]
+Debug = 0
+TenantID = zabbix01
+LogSavePath = /tmp
+Host = http://192.168.10.10:8088
+Token = 2d7a7ab0b0be493ab0bb9a925e4a30d2
+```
+
+Debug 为程序日志级别 0 是 debug，1 为 info
+
+LogSavePath 为日志目录，默认为/tmp 目录
+
+TenantID 租户id，默认即可，如有多套ms-agent发送到同一个zbxtable，建议补重复即可
+
+Host 为 ZbxTable 系统的访问地址，默认为 http:+ 服务器 IP:8088
+
+Token 与 ZbxTable 通信的 Token,可自行修改,需要与 ZbxTable 平台配置保持一致即可，否则无法接收告警。
+
+#### Debug
+
+可修改配置文件打开 Debug 模式，查看日志文件名格式如下/tmp/ms-agent_yyyymmdd.log
+
 
 ## License
 

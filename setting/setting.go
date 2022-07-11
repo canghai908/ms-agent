@@ -3,6 +3,8 @@ package setting
 import (
 	"github.com/go-ini/ini"
 	log "github.com/sirupsen/logrus"
+	"os"
+	"path"
 )
 
 var cfg *ini.File
@@ -18,8 +20,11 @@ type App struct {
 var AppSetting = &App{}
 
 func Setup() {
-	var err error
-	cfg, err = ini.Load("/etc/ms-agent/app.ini")
+	Mpath, err := os.Executable()
+	if err != nil {
+		log.Errorln(err)
+	}
+	cfg, err = ini.Load(path.Dir(Mpath) + "/app.ini")
 	if err != nil {
 		log.Errorln("Fail to parse 'app.ini': %v", err)
 		return

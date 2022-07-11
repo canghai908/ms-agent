@@ -46,7 +46,7 @@ func init() {
 
 func main() {
 	if len(os.Args) < 3 {
-		logging.Error("参数不正确")
+		logging.Error("parameter missing")
 		return
 	}
 	if setting.AppSetting.Debug == "0" {
@@ -58,7 +58,7 @@ func main() {
 	client := &http.Client{
 		Timeout: 5 * time.Second,
 	}
-	addr := setting.AppSetting.Host
+	addr := setting.AppSetting.Host + "/v1/receive"
 	req, err := http.NewRequest("POST", addr, bytes.NewReader(post))
 	if err != nil {
 		logging.Error(err)
