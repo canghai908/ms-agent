@@ -78,7 +78,7 @@ Restart Zabbix Server to take effect.
 Copy the ms-agent binary and app.ini configuration file to the alarm script directory configured by the zabbix server
 
 ````
-cp ms-agent /* /usr/lib/zabbix/alertscripts/
+cp ms-agent/* /usr/lib/zabbix/alertscripts/
 ````
 
 Give the ms-agent script executable permission
